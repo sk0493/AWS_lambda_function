@@ -1,3 +1,3 @@
-lambda_name = "sk_kevin_bacon"
+lambda_name = "sixdegreeskb-tf-sk"
 aws_region  = "eu-west-1"
 cloud_id    = "sk"
