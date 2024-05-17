@@ -15,6 +15,7 @@ resource "random_uuid" "lambda_src_hash" {
   }
 }
 
+# Creating a Python venv and install dependencies
 resource "null_resource" "install_dependencies" {
   provisioner "local-exec" {
     command = <<EOT
@@ -35,6 +36,7 @@ resource "null_resource" "install_dependencies" {
 
 }
 
+# Zipping the Python src files
 data "archive_file" "lambda_source_package" {
   type        = "zip"
   source_dir  = var.lambda_source
@@ -52,7 +54,7 @@ data "aws_iam_role" "iam_for_lambda" {
   name = var.iam_role_name
 }
 
-
+# Creation of AWS Lambda and definition of necessary fields
 resource "aws_lambda_function" "lambda" {
   function_name    = var.lambda_name
   role             = data.aws_iam_role.iam_for_lambda.arn
@@ -82,11 +84,13 @@ resource "aws_lambda_function" "lambda" {
   ]
 }
 
+# for logging and retention period
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = local.cloudwatch_log_group
   retention_in_days = var.log_retention_period
 }
 
+# Attaches specified IAM policies and role used by Lambda function
 resource "aws_iam_role_policy_attachment" "policies" {
   role       = var.iam_role_name
   count      = length(var.policy_arn)
