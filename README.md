@@ -10,10 +10,6 @@ I have included two ways of doing this:
 lambda_function.py and requirements.txt are the requiered files for the Python function. 
 I used a my git repository as a required dependency and module for efficiency. 
 
-# CLI and Archving Method
-
-snippets.md shows a list of all commands and steps to deploy as a lambda function
-
 # IaC Method
 
 At the IaC level. The Terraform configuration files and JSON files deploy the AWS Lambda function and configure its necessary setup and policies.
@@ -34,3 +30,33 @@ At the IaC level. The Terraform configuration files and JSON files deploy the AW
 ## Lambda Function Module 
 
 This automates the deployment of an AWS Lambda function, including packaging the source code, managing dependencies, setting up the necessary IAM roles and policies, creating a CloudWatch log group, and outputting relevant information about the deployed Lambda function. The use of providers, local variables, and resources ensures that the deployment is efficient, repeatable, and maintainable.
+
+# CLI and Manual Archiving Method
+
+List of all commands and steps to deploy as a lambda function
+
+- install aws cli:
+  `msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi`
+  `aws --version`
+
+- Authenticate to aws:
+  `aws configure`
+  xml output : json
+
+- Create virtual environment:
+  `python -m venv .venv`
+
+- Activate virtual environment on Bash:
+  `source .venv/Scripts/activate`
+
+- Install dependencies:
+  `pip install -r requirements.txt`
+
+- Create venv zip folder on Powershell:
+  `compress-archive -path ".venv/Lib/site-packages/*" -destinationPath "deployment.zip"`
+
+- Update zip folder to have lambda_function.py file:
+  `compress-archive -update .\lambda_function.py deployment.zip`
+
+- Deploy to AWS via cli:
+  `aws lambda update-function-code --function-name sixdegreeskb-sk --zip-file fileb://deployment.zip`
