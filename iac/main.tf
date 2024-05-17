@@ -11,6 +11,8 @@ locals {
   logging_policy_name = format("lambda-log-writer-%s", local.lambda_name)
 }
 
+# Configuration of required role and policy as defined in JSON files
+
 data "local_file" "trust_policy" {
   filename = local.trust_policy_file
 }
@@ -31,6 +33,8 @@ resource "aws_iam_policy" "lambda_logging" {
   path   = "/"
   policy = data.local_file.logging_policy.content
 }
+
+# Creation of the AWS Lambda function and deploying the Python src files
 
 module "mod_lambda" {
   source        = "./module"
